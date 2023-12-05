@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #processing {
+            display: none;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        #success, #failure {
+            display: none;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: green; /* Change color to red for failure */
+        }
+
+        #paymentButton {
+            font-size: 1em;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="processing">Processing your payment...</div>
+    <div id="success">Payment successful!</div>
+    <div id="failure">Payment failed. Please try again.</div>
+
+    <button id="paymentButton" onclick="initiatePayment()">Make Payment</button>
+
+    <script>
+        function simulatePayment() {
+            return new Promise((resolve, reject) => {
+                const isPaymentSuccessful = Math.random() < 0.5; // Simulate 50% chance of success
+
+                setTimeout(() => {
+                    if (isPaymentSuccessful) {
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }, 2000); // Simulate a 2-second payment processing time
+            });
+        }
+
+        function initiatePayment() {
+            const processingDiv = document.getElementById('processing');
+            const successDiv = document.getElementById('success');
+            const failureDiv = document.getElementById('failure');
+            const paymentButton = document.getElementById('paymentButton');
+
+            // Show processing UI
+            processingDiv.style.display = 'block';
+            successDiv.style.display = 'none';
+            failureDiv.style.display = 'none';
+            paymentButton.disabled = true;
+
+            // Simulate payment process
+            simulatePayment()
+                .then(() => {
+                    // Show success UI
+                    processingDiv.style.display = 'none';
+                    successDiv.style.display = 'block';
+                    failureDiv.style.display = 'none';
+                })
+                .catch(() => {
+                    // Show failure UI
+                    processingDiv.style.display = 'none';
+                    successDiv.style.display = 'none';
+                    failureDiv.style.display = 'block';
+                })
+                .finally(() => {
+                    // Enable the payment button after processing is complete
+                    paymentButton.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>
